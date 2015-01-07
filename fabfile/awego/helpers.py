@@ -1,5 +1,5 @@
 from __future__ import print_function
-from fabric.api import settings, run, hide
+from fabric.api import settings, run, hide, local
 from collections import namedtuple, Mapping
 from UserDict import IterableUserDict
 from itertools import chain
@@ -20,7 +20,7 @@ def cset(b):# {{{
 def getregions():# {{{
 	with settings(warn_only=True):
 		with hide('stdout', 'stderr'):
-			dj = json.loads(run('aws ec2 describe-regions --region=us-east-1'))
+			dj = json.loads(local('aws ec2 describe-regions --region=us-east-1', capture=True))
 		num_regions = len(dj['Regions'])
 		rl = []
 		while num_regions > 0:
