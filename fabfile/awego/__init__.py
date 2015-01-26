@@ -2,6 +2,7 @@ from fabric.api import settings, run, env, task, hide, local
 from helpers import *
 from color import red, blue, green, turquoise
 import json, boto.ec2
+import ls, rm, mk
 
 env.use_ssh_config = True
 
@@ -35,27 +36,6 @@ def initaws(key=None,secret=None,region=None):# {{{
 
 # }}}
 @task
-def lsregions():# {{{
-	for r in boto.ec2.regions():
-		print(green(r.name))
-#	for r in getregions():
-#		print(green(r))
-# }}}
-@task
-def lskeys():# {{{
-	with settings(warn_only=True), hide('stdout', 'stderr', 'running', 'warnings'):
-		for region in getregions():
-			jr = json.loads(local('aws ec2 describe-key-pairs --region ' + region, capture=True))
-			if jr.get('KeyPairs'):
-				for pair in jr.get('KeyPairs'):
-					print(green(region))
-					print(turquoise(pair['KeyName'] + " => " + pair['KeyFingerprint']))
-# }}}
-@task
-def lsvpc():
-	with settings(warn_only=True), hide('stdout', 'stderr', 'running', 'warnings'):
-		for region in getregions():
-			jr = json.loads(local('aws ec2 describe-vpcs --region ' + region, capture=True))
-			dj = ddl(jr)
-			print(green(region))
-			print(str(dj.Vpcs))
+def deploy(instance, states=False):
+	pass
+
